@@ -44,10 +44,11 @@
                         <tr>
 
                             <th class="text-center">No</th>
-                            <th class="text-center">Foto</th>
+                            {{-- <th class="text-center">Foto</th> --}}
                             <th class="text-center">Nama Barang</th>
                             <th class="text-center">Kategori</th>
                             <th class="text-center">Stok</th>
+                            <th class="text-center">Satuan</th>
                             <th class="text-center">Harga</th>
                             <th width="250" class="text-center">
                                 Aksi
@@ -66,7 +67,7 @@
                                     {{ $loop->iteration }}
                                 </td>
 
-                                <td width="100">
+                                {{-- <td width="100">
 
                                     @if ($barang->foto)
                                         <img src="{{ asset('storage/' . $barang->foto) }}" width="80">
@@ -74,7 +75,7 @@
                                         -
                                     @endif
 
-                                </td>
+                                </td> --}}
 
                                 <td>
                                     {{ $barang->nama_barang }}
@@ -100,6 +101,10 @@
                                         </span>
                                     @endif
 
+                                </td>
+
+                                <td>
+                                    {{ $barang->satuan ?? '-' }}
                                 </td>
 
                                 <td>
@@ -229,7 +234,7 @@
 
                             <tr>
 
-                                <td colspan="7" class="text-center">
+                                <td colspan="8" class="text-center">
 
                                     Belum ada data barang
 

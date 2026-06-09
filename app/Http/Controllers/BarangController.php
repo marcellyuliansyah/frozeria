@@ -31,7 +31,12 @@ class BarangController extends Controller
             'kategori_id' => 'required',
             'nama_barang' => 'required',
             'stok' => 'required|integer',
+            'satuan' => 'required',
+            'stok_minimum' => 'nullable|integer',
+            'berat' => 'nullable|string',
+            'lokasi' => 'nullable|string|max:255',
             'harga' => 'nullable|numeric',
+            'harga_beli' => 'nullable|numeric',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -46,10 +51,21 @@ class BarangController extends Controller
             'kategori_id' => $request->kategori_id,
             'nama_barang' => $request->nama_barang,
             'stok' => $request->stok,
+            'satuan' => $request->satuan,
+            'stok_minimum' => $request->stok_minimum,
+            'berat' => $request->berat,
+            'lokasi' => $request->lokasi,
             'harga' => $request->harga,
+            'harga_beli' => $request->harga_beli,
             'foto' => $foto,
             'deskripsi' => $request->deskripsi,
         ]);
+
+        if ($request->from === 'dashboard') {
+            return redirect()
+                ->route('dashboard')
+                ->with('success', 'Barang berhasil ditambahkan');
+        }
 
         return redirect()
             ->route('barang.index')
@@ -74,6 +90,12 @@ class BarangController extends Controller
             'kategori_id' => 'required',
             'nama_barang' => 'required',
             'stok' => 'required|integer',
+            'satuan' => 'required',
+            'stok_minimum' => 'nullable|integer',
+            'berat' => 'nullable|string',
+            'lokasi' => 'nullable|string|max:255',
+            'harga' => 'nullable|numeric',
+            'harga_beli' => 'nullable|numeric',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -90,7 +112,12 @@ class BarangController extends Controller
             'kategori_id' => $request->kategori_id,
             'nama_barang' => $request->nama_barang,
             'stok' => $request->stok,
+            'satuan' => $request->satuan,
+            'stok_minimum' => $request->stok_minimum,
+            'berat' => $request->berat,
+            'lokasi' => $request->lokasi,
             'harga' => $request->harga,
+            'harga_beli' => $request->harga_beli,
             'deskripsi' => $request->deskripsi,
             'foto' => $barang->foto
         ]);

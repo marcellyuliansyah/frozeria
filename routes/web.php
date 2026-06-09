@@ -29,6 +29,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('barang', BarangController::class);
 
     Route::resource('kategori', KategoriController::class);
+
+    Route::view('/bantuan', 'bantuan.index')
+        ->name('bantuan');
 });
 
 require __DIR__ . '/auth.php';

@@ -23,14 +23,23 @@ class DashboardController extends Controller
             $query->where('kategori_id', $kategori);
         }
 
-        $barangs = $query->latest()->paginate(10);
+        $barangs = $query->latest()->paginate(5);
+
+        // Stok menipis (1 - 9)
+        $stokMenipis = Barang::where('stok', '<', 20)
+            ->where('stok', '>', 0)
+            ->get();
+
+        // Stok habis (0)
+        $stokHabis = Barang::where('stok', 0)->get();
 
         return view('dashboard.index', [
             'barangs' => $barangs,
             'kategoris' => Kategori::all(),
             'totalBarang' => Barang::count(),
             'totalKategori' => Kategori::count(),
-            'totalStok' => Barang::sum('stok')
+            'stokMenipis' => $stokMenipis,
+            'stokHabis' => $stokHabis,
         ]);
     }
 }

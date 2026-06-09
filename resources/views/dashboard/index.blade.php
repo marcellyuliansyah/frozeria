@@ -3,19 +3,48 @@
 @section('content')
     <div class="container-fluid">
 
-        <div class="mb-4">
-            <h2 class="fw-bold">
-                Dashboard Frozeria
-            </h2>
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ session('success') }}
 
-            <p class="text-muted">
-                Sistem Stok Opname Frozen Food
-            </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-x-circle-fill me-2"></i>
+                {{ session('error') }}
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        <div class="mb-4 d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h2 class="fw-bold">
+                    Dashboard Frozeria
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Sistem Stok Opname Frozen Food
+                </p>
+
+            </div>
+
+            <a href="{{ route('barang.create', ['from' => 'dashboard']) }}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i>
+                Tambah Barang
+            </a>
+
         </div>
 
         <div class="row mb-4">
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 
                 <div class="card shadow-sm border-0">
 
@@ -35,7 +64,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 
                 <div class="card shadow-sm border-0">
 
@@ -55,18 +84,38 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-sm border-warning">
 
                     <div class="card-body">
 
-                        <h6 class="text-muted">
-                            Total Stok
+                        <h6 class="text-warning">
+                            Stok Menipis
                         </h6>
 
-                        <h2 class="fw-bold">
-                            {{ $totalStok }}
+                        <h2 class="fw-bold text-warning">
+                            {{ $stokMenipis->count() }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-danger">
+
+                    <div class="card-body">
+
+                        <h6 class="text-danger">
+                            Stok Habis
+                        </h6>
+
+                        <h2 class="fw-bold text-danger">
+                            {{ $stokHabis->count() }}
                         </h2>
 
                     </div>
@@ -76,6 +125,54 @@
             </div>
 
         </div>
+
+        @if ($stokMenipis->count() > 0)
+            <div class="alert alert-danger shadow-sm">
+
+                <h5>
+
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Peringatan Stok Menipis
+
+                </h5>
+
+                <ul class="mb-0">
+
+                    @foreach ($stokMenipis as $barang)
+                        <li>
+
+                            <strong>{{ $barang->nama_barang }}</strong>
+                            - Stok tersisa {{ $barang->stok }}
+
+                        </li>
+                    @endforeach
+
+                </ul>
+
+            </div>
+        @endif
+
+        @if ($stokHabis->count() > 0)
+            <div class="alert alert-danger shadow-sm">
+
+                <h5>
+                    <i class="bi bi-x-octagon-fill me-2"></i>
+                    Peringatan Stok Habis
+                </h5>
+
+                <ul class="mb-0">
+
+                    @foreach ($stokHabis as $barang)
+                        <li>
+                            <strong>{{ $barang->nama_barang }}</strong>
+                            - Stok habis 0
+                        </li>
+                    @endforeach
+
+                </ul>
+
+            </div>
+        @endif
 
         <div class="card shadow-sm border-0">
 
@@ -94,7 +191,7 @@
 
                         <div class="col-md-4">
 
-                            <select name="kategori" class="form-select">
+                            <select name="kategori" class="form-select" onchange="this.form.submit()">
 
                                 <option value="">
                                     Semua Kategori
@@ -153,6 +250,7 @@
                             <th class="text-center">Nama Barang</th>
                             <th class="text-center">Kategori</th>
                             <th class="text-center">Stok</th>
+                            <th class="text-center">Satuan</th>
                             <th class="text-center" width="220">Aksi</th>
 
                         </tr>
@@ -178,6 +276,10 @@
 
                                 <td>
                                     {{ $barang->stok }}
+                                </td>
+
+                                <td>
+                                    {{ $barang->satuan ?? '-' }}
                                 </td>
 
                                 <td class="text-center align-middle">
@@ -277,7 +379,7 @@
 
                             <tr>
 
-                                <td colspan="5" class="text-center">
+                                <td colspan="6" class="text-center">
 
                                     Belum ada data barang
 
@@ -290,7 +392,28 @@
 
                 </table>
 
-                {{ $barangs->links() }}
+                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                    <div class="text-muted">
+
+                        Menampilkan
+                        {{ $barangs->firstItem() ?? 0 }}
+                        -
+                        {{ $barangs->lastItem() ?? 0 }}
+                        dari
+                        {{ $barangs->total() }}
+                        barang
+
+                    </div>
+
+                    <div>
+
+                        {{ $barangs->links() }}
+
+
+                    </div>
+
+                </div>
 
             </div>
 

@@ -30,30 +30,93 @@
                     <table class="table table-bordered">
 
                         <tr>
-                            <th width="200">Nama Barang</th>
+                            <th width="220">Nama Barang</th>
                             <td>{{ $barang->nama_barang }}</td>
                         </tr>
 
                         <tr>
                             <th>Kategori</th>
-                            <td>{{ $barang->kategori->nama }}</td>
+                            <td>{{ $barang->kategori->nama ?? '-' }}</td>
                         </tr>
 
                         <tr>
-                            <th>Stok</th>
-                            <td>{{ $barang->stok }}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Harga</th>
+                            <th>Stok Saat Ini</th>
                             <td>
-                                Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                                <span class="badge bg-primary">
+                                    {{ $barang->stok }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Stok Minimum</th>
+                            <td>
+                                {{ $barang->stok_minimum ?? '-' }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Satuan</th>
+                            <td>
+                                {{ $barang->satuan ?? '-' }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Berat / Ukuran</th>
+                            <td>
+                                {{ $barang->berat ?? '-' }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Lokasi Penyimpanan</th>
+                            <td>
+                                {{ $barang->lokasi ?? '-' }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Harga Beli</th>
+                            <td>
+                                @if ($barang->harga_beli)
+                                    Rp {{ number_format($barang->harga_beli, 0, ',', '.') }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Harga Jual</th>
+                            <td>
+                                @if ($barang->harga)
+                                    Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                                @else
+                                    -
+                                @endif
                             </td>
                         </tr>
 
                         <tr>
                             <th>Deskripsi</th>
-                            <td>{{ $barang->deskripsi }}</td>
+                            <td>
+                                {{ $barang->deskripsi ?: '-' }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Dibuat</th>
+                            <td>
+                                {{ $barang->created_at->format('d M Y H:i') }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Terakhir Diupdate</th>
+                            <td>
+                                {{ $barang->updated_at->format('d M Y H:i') }}
+                            </td>
                         </tr>
 
                     </table>

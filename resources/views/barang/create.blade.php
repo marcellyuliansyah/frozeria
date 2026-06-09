@@ -2,103 +2,218 @@
 
 @section('content')
 
-    <div class="card shadow-sm">
+    <div class="container">
 
-        <div class="card-header bg-primary text-white">
-            Tambah Barang
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h3 class="fw-bold mb-0">
+                Tambah Barang Baru
+            </h3>
+
+            <a href="{{ request('from') == 'dashboard' ? route('dashboard') : route('barang.index') }}"
+                class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+
+            </a>
+
         </div>
 
-        <div class="card-body">
+        {{-- ERROR VALIDASI --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
 
-            {{-- ERROR VALIDASI --}}
-            @if ($errors->any())
-                <div class="alert alert-danger">
+                <ul class="mb-0">
 
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
 
-                </div>
-            @endif
+                </ul>
 
-            <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
+            </div>
+        @endif
 
-                @csrf
+        <div class="card shadow-sm border-0">
 
-                {{-- KATEGORI --}}
-                <div class="mb-3">
+            <div class="card-body">
 
-                    <label class="form-label">Kategori</label>
+                <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
 
-                    <select name="kategori_id" class="form-select" required>
+                    @csrf
 
-                        @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}">
-                                {{ $kategori->nama }}
-                            </option>
-                        @endforeach
+                    <input type="hidden" name="from" value="{{ request('from') }}">
 
-                    </select>
+                    {{-- FOTO --}}
+                    <div class="mb-4">
 
-                </div>
+                        <label class="form-label fw-semibold">
+                            Foto Barang
+                        </label>
 
-                {{-- NAMA BARANG --}}
-                <div class="mb-3">
+                        <input type="file" name="foto" class="form-control">
 
-                    <label class="form-label">Nama Barang</label>
+                    </div>
 
-                    <input type="text" name="nama_barang" class="form-control" required>
+                    <div class="row">
 
-                </div>
+                        {{-- NAMA BARANG --}}
+                        <div class="col-md-6 mb-3">
 
-                {{-- STOK --}}
-                <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Nama Barang <span class="text-danger">*</span>
+                            </label>
 
-                    <label class="form-label">Stok</label>
+                            <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}"
+                                required>
 
-                    <input type="number" name="stok" class="form-control" required>
+                        </div>
 
-                </div>
+                        {{-- KATEGORI --}}
+                        <div class="col-md-6 mb-3">
 
-                {{-- HARGA --}}
-                <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Kategori <span class="text-danger">*</span>
+                            </label>
 
-                    <label class="form-label">Harga</label>
+                            <select name="kategori_id" class="form-select" required>
 
-                    <input type="text" name="harga" class="form-control" placeholder="Contoh: 10000 atau 10.000">
+                                <option value="">
+                                    Pilih Kategori
+                                </option>
 
-                    <small class="text-muted">
-                        Masukkan angka tanpa wajib titik (akan diproses sistem)
-                    </small>
+                                @foreach ($kategoris as $kategori)
+                                    <option value="{{ $kategori->id }}"
+                                        {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
 
-                </div>
+                                        {{ $kategori->nama }}
 
-                {{-- FOTO --}}
-                <div class="mb-3">
+                                    </option>
+                                @endforeach
 
-                    <label class="form-label">Foto</label>
+                            </select>
 
-                    <input type="file" name="foto" class="form-control">
+                        </div>
 
-                </div>
+                        {{-- STOK --}}
+                        <div class="col-md-6 mb-3">
 
-                {{-- DESKRIPSI --}}
-                <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Jumlah Stok <span class="text-danger">*</span>
+                            </label>
 
-                    <label class="form-label">Deskripsi</label>
+                            <input type="number" name="stok" class="form-control" value="{{ old('stok') }}" required>
 
-                    <textarea name="deskripsi" rows="4" class="form-control"></textarea>
+                        </div>
 
-                </div>
+                        {{-- STOK MINIMUM --}}
+                        <div class="col-md-6 mb-3">
 
-                {{-- BUTTON --}}
-                <button type="submit" class="btn btn-primary">
-                    Simpan
-                </button>
+                            <label class="form-label fw-semibold">
+                                Stok Minimum
+                            </label>
 
-            </form>
+                            <input type="number" name="stok_minimum" class="form-control" value="{{ old('stok_minimum') }}"
+                                placeholder="Contoh: 10">
+
+                        </div>
+
+                        {{-- HARGA JUAL --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Harga Jual (Rp)
+                            </label>
+
+                            <input type="number" name="harga" class="form-control" value="{{ old('harga') }}"
+                                placeholder="Contoh: 35000">
+
+                        </div>
+
+                        {{-- HARGA BELI --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Harga Beli (Rp)
+                            </label>
+
+                            <input type="number" name="harga_beli" class="form-control" value="{{ old('harga_beli') }}"
+                                placeholder=>
+
+                        </div>
+
+                        {{-- SATUAN --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Satuan <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text" name="satuan" class="form-control" value="{{ old('satuan') }}"
+                                placeholder="Contoh: pcs, pack" required>
+
+                        </div>
+
+                        {{-- BERAT / UKURAN --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Berat / Ukuran
+                            </label>
+
+                            <input type="text" name="berat" class="form-control" value="{{ old('berat') }}"
+                                placeholder="Contoh: 50 gram">
+
+                        </div>
+
+                        {{-- LOKASI PENYIMPANAN --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Lokasi Penyimpanan
+                            </label>
+
+                            <input type="text" name="lokasi" class="form-control" value="{{ old('lokasi') }}"
+                                placeholder>
+
+                        </div>
+
+
+                        {{-- DESKRIPSI --}}
+                        <div class="col-12 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Deskripsi
+                            </label>
+
+                            <textarea name="deskripsi" rows="4" class="form-control">{{ old('deskripsi') }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+
+                        <a href="{{ request('from') == 'dashboard' ? route('dashboard') : route('barang.index') }}"
+                            class="btn btn-secondary">
+
+                            Batal
+
+                        </a>
+
+                        <button type="submit" class="btn btn-success">
+
+                            <i class="bi bi-check-circle"></i>
+                            Simpan Barang
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 

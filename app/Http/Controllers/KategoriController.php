@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kategoris = Kategori::latest()->get();
+        $search = $request->search;
+
+        $kategoris = Kategori::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->get();
 
         return view('kategori.index', compact('kategoris'));
     }
-
     public function create()
     {
         return view('kategori.create');

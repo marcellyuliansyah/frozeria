@@ -32,6 +32,10 @@
                     Barang
                 </a>
 
+                <a href="{{ route('bantuan') }}" class="btn btn-light btn-sm">
+                    Bantuan
+                </a>
+
             </div>
 
         </div>

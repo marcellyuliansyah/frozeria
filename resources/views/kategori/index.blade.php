@@ -34,6 +34,13 @@
 
         <div class="card-body">
 
+            <form method="GET" action="{{ route('kategori.index') }}" class="mb-3">
+
+                <input type="text" name="search" class="form-control" placeholder="Cari kategori..."
+                    value="{{ request('search') }}">
+
+            </form>
+
             <div class="table-responsive">
 
                 <table class="table table-hover align-middle">
